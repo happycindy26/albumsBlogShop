@@ -1,6 +1,7 @@
-<?php session_start(); //connect to database
+<?php 
+require_once('../oop_conn.php');
+session_start(); 
 $total=0;
-$mysqli = mysqli_connect("localhost", "root", "", "retro"); 
 $display_block = "<h1>Your Shopping Cart</h1>"; 
 //check for cart items based on user session id
  $get_cart_sql = "SELECT st.id, si.item_title, si.item_price,
@@ -14,11 +15,9 @@ $display_block = "<h1>Your Shopping Cart</h1>";
  or die(mysqli_error($mysqli));
 
 if (mysqli_num_rows($get_cart_res) < 1) {
-    //print message
     $display_block .= "<p>You have no items in your cart.
     Please <a href=\"../seestore.php\">continue to shop</a>!</p>";
 } else {
-    //get info and build cart display
     $display_block .= <<<END_OF_TEXT
     <table>
         <tr>
@@ -58,9 +57,7 @@ if (mysqli_num_rows($get_cart_res) < 1) {
     $display_block .= "</table>";
  }
  $_SESSION['total'] = $total;
- //free result
  mysqli_free_result($get_cart_res);
-//close connection to MySQL
  mysqli_close($mysqli);
  $display_block .= "<p><a href=\"../seestore.php\">back to Shop</a></p>
                     <p><a href=\"checkout.php\">Check out</a></p>";
@@ -83,12 +80,11 @@ if (mysqli_num_rows($get_cart_res) < 1) {
         <input class="menu-btn" type="checkbox" id="menu-btn" />
         <label class="menu-icon" for="menu-btn"><span class="navicon"></span></label>
         <ul class="menu">
-            <li><a href="../home.html">Home</a></li>
+            <li><a href="../index.html">Home</a></li>
             <li><a href="../blog.html">Blog</a></li>
             <li><a href="../seestore.php">Shop</a></li>
         </ul>
     </header>
-
     <main class="showcart">
         <?php echo $display_block; ?>
     </main>

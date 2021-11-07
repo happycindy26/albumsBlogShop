@@ -1,6 +1,7 @@
-<?php session_start();
+<?php 
+require_once('../oop_conn.php');
+session_start();
 $total = $_SESSION['total'];
-$mysqli = mysqli_connect("localhost", "root", "", "retro");
 if(isset($_POST['submit'])) {
     $safe_sess = mysqli_real_escape_string($mysqli, $_POST['session']);
     $safe_name = mysqli_real_escape_string($mysqli, $_POST['name']);
@@ -30,6 +31,7 @@ if(isset($_POST['submit'])) {
 
     while ($cart_info = mysqli_fetch_array($get_cart_res)) {
         $id = $cart_info['id'];
+        $sel_item_id = $cart_info['sel_item_id'];
         $item_title = stripslashes($cart_info['item_title']);
         $item_price = $cart_info['item_price'];
         $item_qty = $cart_info['sel_item_qty'];
@@ -43,21 +45,16 @@ if(isset($_POST['submit'])) {
         
         $update_order_quantity_sql = "UPDATE store_items
         SET cur_quant = cur_quant - '".$item_qty."'
-           WHERE id = '".$id."'";
+           WHERE id = '".$sel_item_id."'";
         $update_order_quantity_res = mysqli_query($mysqli, $update_order_quantity_sql)
         or die(mysqli_error($mysqli));
 
-    $delete_order_item_sql = "DELETE FROM store_shoppertrack
-     WHERE session_id ='".$_COOKIE['PHPSESSID']."'";
-    $delete_order_item_res = mysqli_query($mysqli, $delete_order_item_sql)
-    or die(mysqli_error($mysqli));
-
-    
+        $delete_order_item_sql = "DELETE FROM store_shoppertrack
+        WHERE session_id ='".$_COOKIE['PHPSESSID']."'";
+        $delete_order_item_res = mysqli_query($mysqli, $delete_order_item_sql)
+        or die(mysqli_error($mysqli));
     }
-
     mysqli_close($mysqli);
-
-    
 ?>
 
 <!DOCTYPE html>
@@ -77,7 +74,7 @@ if(isset($_POST['submit'])) {
         <input class="menu-btn" type="checkbox" id="menu-btn" />
         <label class="menu-icon" for="menu-btn"><span class="navicon"></span></label>
         <ul class="menu">
-            <li><a href="../home.html">Home</a></li>
+            <li><a href="../index.html">Home</a></li>
             <li><a href="../blog.html">Blog</a></li>
             <li><a href="../seestore.php">Shop</a></li>
         </ul>

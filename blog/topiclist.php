@@ -1,8 +1,5 @@
 <?php
-    include 'ch21_include.php';
-    doDB();
-
-    //gather the topics
+require_once('../oop_conn.php');
     $get_topics_sql = "SELECT topic_id, topic_title,
                        DATE_FORMAT(topic_create_time, '%b %e %Y at %r') 
                        AS fmt_topic_create_time, topic_owner 
@@ -12,10 +9,8 @@
     or die(mysqli_error($mysqli));
 
     if (mysqli_num_rows($get_topics_res) < 1) {
-        //there are no topics, so say so
         $display_block = "<p><em>No topics exist.</em></p>";
     } else {
-        //create the display string
         $display_block = <<<END_OF_TEXT
         <table>
             <tr>
@@ -30,7 +25,6 @@ END_OF_TEXT;
             $topic_create_time = $topic_info['fmt_topic_create_time'];
             $topic_owner = stripslashes($topic_info['topic_owner']);
 
-            //get number of posts
             $get_num_posts_sql = "SELECT COUNT(post_id) AS post_count 
                                 FROM forum_posts 
                                 WHERE topic_id = '".$topic_id."'";
@@ -42,7 +36,6 @@ END_OF_TEXT;
                 $num_posts = $posts_info['post_count'];
             }
 
-            //add to display
             $display_block .= <<<END_OF_TEXT
             <tr>
                 <td><a href="showtopic.php?topic_id=$topic_id">
@@ -52,14 +45,9 @@ END_OF_TEXT;
             </tr>
             END_OF_TEXT;
         }
-        //free results
         mysqli_free_result($get_topics_res);
         mysqli_free_result($get_num_posts_res);
-
-        //close connection to MySQL
         mysqli_close($mysqli);
-
-        //close up the table
         $display_block .= "</table>";
     }
 ?>
@@ -81,7 +69,7 @@ END_OF_TEXT;
         <input class="menu-btn" type="checkbox" id="menu-btn" />
         <label class="menu-icon" for="menu-btn"><span class="navicon"></span></label>
         <ul class="menu">
-            <li><a href="../home.html">Home</a></li>
+            <li><a href="../index.html">Home</a></li>
             <li><a href="../blog.html">Blog</a></li>
             <li><a href="../seestore.php">Shop</a></li>
         </ul>

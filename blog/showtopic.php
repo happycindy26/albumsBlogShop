@@ -1,16 +1,12 @@
 <?php
-    include 'ch21_include.php';
-    doDB();
-
+require_once('../oop_conn.php');
     //check for required info from the query string
     if (!isset($_GET['topic_id'])) {
         header("Location: topiclist.php");
         exit;
     }
-
     //create safe values for use
     $safe_topic_id = mysqli_real_escape_string($mysqli, $_GET['topic_id']);
-
     //verify the topic exists
     $verify_topic_sql = "SELECT topic_title 
                         FROM forum_topics
@@ -26,8 +22,7 @@
         //get the topic title
         while ($topic_info = mysqli_fetch_array($verify_topic_res)) {
             $topic_title = stripslashes($topic_info['topic_title']);
-        }
-    
+        }   
         //gather the posts
         $get_posts_sql = "SELECT post_id, post_text, 
                           DATE_FORMAT(post_create_time, '%b %e %Y<br/>%r') 
@@ -44,42 +39,15 @@
             $post_text = nl2br(stripslashes($posts_info['post_text']));
             $post_create_time = $posts_info['fmt_post_create_time'];
             $post_owner = stripslashes($posts_info['post_owner']);
-        }
-    
-        //free results
+        }   
         mysqli_free_result($get_posts_res);
         mysqli_free_result($verify_topic_res);
-        
-        //close connection to MySQL
         mysqli_close($mysqli);
         
     }
     ?>
-<!-- <!DOCTYPE html>
- <html>
-<head>
-<title>Posts in Topic</title>
-<style >
-table {
- border: 1px solid black;
-     border-collapse: collapse;
-    }
-     th {
-     border: 1px solid black;
-    padding: 6px;
-     font-weight: bold;
-    background: #ccc;
-     }
-     td {
-     border: 1px solid black;
-     padding: 6px;
-     vertical-align: top;
-     }
-     .num_posts_col { text-align: center; }
-     </style>
-     </head> -->
 
-     <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -96,7 +64,7 @@ table {
         <input class="menu-btn" type="checkbox" id="menu-btn" />
         <label class="menu-icon" for="menu-btn"><span class="navicon"></span></label>
         <ul class="menu">
-            <li><a href="../home.html">Home</a></li>
+            <li><a href="../index.html">Home</a></li>
             <li><a href="../blog.html">Blog</a></li>
             <li><a href="../seestore.php">Shop</a></li>
         </ul>
@@ -119,6 +87,10 @@ table {
                     <strong>REPLY TO POST</strong></a></td>
             </tr>
         </table>
+        <p>Would you like to see a <a href="topiclist.php">list of all topics</a>?</p>
     </main>
 </body>
 <?php include('../html/footer.html') ?>
+
+
+

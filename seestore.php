@@ -1,7 +1,5 @@
 <?php
- //connect to database
- $mysqli = mysqli_connect("localhost", "root", "", "retro");
-
+ require_once('oop_conn.php');
  $display_block = "<main class=\"seestore\">
                         <div class=\"store\">
                             <h1>My Categories</h1>
@@ -96,7 +94,7 @@
         <input class="menu-btn" type="checkbox" id="menu-btn" />
         <label class="menu-icon" for="menu-btn"><span class="navicon"></span></label>
         <ul class="menu">
-            <li><a href="home.html">Home</a></li>
+            <li><a href="index.html">Home</a></li>
             <li><a href="blog.html">Blog</a></li>
             <li><a href="seestore.php">Shop</a></li>
         </ul>

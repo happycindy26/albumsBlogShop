@@ -7,6 +7,13 @@
     <title>Retro Records</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="../style.css"> 
+    <style>
+        /* body{width:50%;} */
+        /* #frmCheckUsername {border-top:#F0F0F0 2px solid;background:#FAF8F8;padding:10px;} */
+        /* .demoInputBox{padding:7px; border:#F0F0F0 1px solid; border-radius:4px;} */
+        .status-available{color:#2FC332;}
+        .status-not-available{color:#D60202;}
+    </style>
 </head>
 
 <body>
@@ -15,7 +22,7 @@
         <input class="menu-btn" type="checkbox" id="menu-btn" />
         <label class="menu-icon" for="menu-btn"><span class="navicon"></span></label>
         <ul class="menu">
-            <li><a href="../home.html">Home</a></li>
+            <li><a href="../index.html">Home</a></li>
             <li><a href="../blog.html">Blog</a></li>
             <li><a href="../seestore.php">Shop</a></li>
         </ul>
@@ -23,6 +30,10 @@
 
     <main class="addtopic" >
         <h1>Add a Topic</h1>
+        <div id="frmCheckUsername">
+            <label for="user_name">User Name:</label><br/>
+            <input type="user_name" id="user_name" name="user_name" onchange="checkAvailability()" required ><span id="user-availability-status"></span><br/>
+        </div>
         <form method="post" action="do_addtopic.php?forum_id=<?php echo $_GET['forum_id'] ?>">
             <label for="topic_owner">Your Email Address:</label><br/>
             <input type="email" id="topic_owner" name="topic_owner" size="40"
@@ -37,8 +48,8 @@
             <button type="submit" name="submit" value="submit">Add Topic</button>
         </form>
     </main>
-<?php include('../html/footer.html') ?>
-    <!-- <footer class="footer"> 
+    
+    <footer class="footer"> 
         <div class="icons">
             <i class="fab fa-facebook-square"></i>
             <i class="fab fa-twitter-square"></i>
@@ -50,6 +61,22 @@
             <p>legals</p>
         </div>  
     </footer>      
-    <script src="script.js" ></script>
+    <script src="jquery.js"></script>
+<script>
+function checkAvailability() {
+	// $("#loaderIcon").show();
+	jQuery.ajax({
+	url: "check_availability.php",
+	data:'user_name='+$("#user_name").val(),
+	type: "POST",
+	success:function(data){
+		$("#user-availability-status").html(data);
+		// $("#loaderIcon").hide();
+	},
+	error:function (){}
+	});
+}
+</script>
+
 </body>
-</html> -->
+</html>

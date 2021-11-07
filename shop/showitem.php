@@ -1,9 +1,6 @@
-<?php //connect to database 
- $mysqli = mysqli_connect("localhost", "root", "", "retro"); 
-
- //create safe values for use 
+<?php 
+ require_once('../oop_conn.php');
  $safe_item_id = mysqli_real_escape_string($mysqli, $_GET['item_id']);
- //validate item
  $get_item_sql = "SELECT c.id as cat_id, c.cat_title, si.item_title,si.item_artist,
                          si.item_price, si.item_desc, si.item_image 
                   FROM store_items AS si 
@@ -14,10 +11,8 @@
  or die(mysqli_error($mysqli));
 
  if (mysqli_num_rows($get_item_res) < 1) {
-    //invalid item
     $display_block = "<p><em>Invalid item selection.</em></p>";
  } else {
-        //valid item, get info
         while ($item_info = mysqli_fetch_array($get_item_res)) {
             $cat_id = $item_info['cat_id'];
             $cat_title = strtoupper(stripslashes($item_info['cat_title']));
@@ -26,12 +21,8 @@
             $item_desc = stripslashes($item_info['item_desc']);
             $item_image = $item_info['item_image'];
         }
-        //make breadcrumb trail & display of item
-       
-        //free result
         mysqli_free_result($get_item_res);
     }
-    //close connection to MySQL
     mysqli_close($mysqli);
  ?>
 
@@ -53,7 +44,7 @@
         <input class="menu-btn" type="checkbox" id="menu-btn" />
         <label class="menu-icon" for="menu-btn"><span class="navicon"></span></label>
         <ul class="menu">
-            <li><a href="../home.html">Home</a></li>
+            <li><a href="../index.html">Home</a></li>
             <li><a href="../blog.html">Blog</a></li>
             <li><a href="../seestore.php">Shop</a></li>
         </ul>

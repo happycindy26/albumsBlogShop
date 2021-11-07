@@ -1,6 +1,7 @@
-<?php session_start();
+<?php 
+require_once('../oop_conn.php');
+session_start();
 $total = $_SESSION['total'];
-$mysqli = mysqli_connect("localhost", "root", "", "retro");
 $display_block = "<h1>Your order so far:</h1>"; 
 //check for cart items based on user session id
  $get_cart_sql = "SELECT st.id, si.item_title, si.cur_quant, si.id, si.item_price,
@@ -18,7 +19,6 @@ if (mysqli_num_rows($get_cart_res) < 1) {
     $display_block .= "<p>You have no items in your cart.
     Please <a href=\"seestore.php\">continue to shop</a>!</p>";
 } else {
-    //get info and build cart display
     $display_block .= <<<END_OF_TEXT
     <table>
         <tr>
@@ -78,7 +78,7 @@ if (mysqli_num_rows($get_cart_res) < 1) {
         <input class="menu-btn" type="checkbox" id="menu-btn" />
         <label class="menu-icon" for="menu-btn"><span class="navicon"></span></label>
         <ul class="menu">
-            <li><a href="../home.html">Home</a></li>
+            <li><a href="../index.html">Home</a></li>
             <li><a href="../blog.html">Blog</a></li>
             <li><a href="../seestore.php">Shop</a></li>
         </ul>
